@@ -73,6 +73,10 @@ export default defineComponent({
   },
   beforeRouteLeave(to, from, next) {
     console.log('beforeRouteLeave... close websocket');
+    
+    this.connection.onclose = function () {
+      console.log('WebSocket Client Closed');
+    };
     this.connection.close();
     next();
   },

@@ -54,7 +54,7 @@ func GetStatus(c echo.Context) error {
 
 			// Write
 			result := GenStatus()
-			err := websocket.Message.Send(ws, string(result))
+			err = websocket.Message.Send(ws, string(result))
 			if err != nil {
 				c.Logger().Error(err)
 				return
@@ -86,16 +86,18 @@ func Hello(c echo.Context) error {
 		}
 		fmt.Printf("%s\n", msg)
 		for {
+
 			// Write
 			result := fmt.Sprintf("{%q: [{%q: %4.2f}, {%q: %4.2f}], %q: %q}", "data", "p", rand.Float32()*100, "p", rand.Float32()*100, "type", GetType(rand.Float32()*100))
 			err := websocket.Message.Send(ws, result)
 			if err != nil {
 				c.Logger().Error(err)
+				fmt.Printf("Error: %s\n", err)
+				fmt.Printf("\n\n...closing connection\n")
 				return
 
 			}
 			fmt.Printf("out: %s\n", result)
-
 			time.Sleep(2 * time.Second)
 		}
 	}).ServeHTTP(c.Response(), c.Request())
